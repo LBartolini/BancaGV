@@ -1,10 +1,13 @@
 package com.bancagv.server;
 
 public class Server {
+	
+	public Server() {
+		
+	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		Server s = new Server();
 	}
 	
 }
