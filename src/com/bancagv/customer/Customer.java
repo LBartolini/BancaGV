@@ -1,10 +1,13 @@
 package com.bancagv.customer;
 
+import com.bancagv.customer.graphic.LoginPage;
+
 public class Customer {
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		LoginPage p = new LoginPage();
+		
+	
 	}
 
 }
