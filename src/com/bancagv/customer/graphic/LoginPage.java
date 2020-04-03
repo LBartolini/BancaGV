@@ -3,26 +3,52 @@ package com.bancagv.customer.graphic;
 import java.awt.*;
 
 import javax.swing.*;
+
+import com.bancagv.customer.Customer;
 public class LoginPage {
 	private JFrame frame;
 	private JPanel form;
+	private JPanel formName;
+	private JPanel formPassword;
+	private JPanel formNameField;
+	private JPanel formPasswordField;
+	private JPanel formLogin;
+	private JPanel formSignIn;
 	private Label name;
 	private Label password;
 	private TextField nameField;
 	private TextField passwordField;
 	private JButton login;
 	private JButton signIn;
+	Customer customer;
 	
-	public LoginPage() {
+	public LoginPage(Customer customer) {
+		this.customer = customer;
 		this.frame = new JFrame();
 		
 		this.frameSetup();
 		
 		this.form = new JPanel();
 		
-		this.panelSetup();
+		this.formName = new JPanel();
+		this.formPassword = new JPanel();
+		this.formNameField = new JPanel();
+		this.formPasswordField = new JPanel();
+		this.formLogin = new JPanel();
+		this.formSignIn = new JPanel();
+		//this.formName.setLayout(new Layout());
 		
+		
+		this.panelSetup();
+		form.add(formName);
+		form.add(formNameField);
+		form.add(formPassword);
+		
+		form.add(formPasswordField);
+		form.add(formLogin);
+		form.add(formSignIn);
 		this.frame.add(form);
+		
 		
 		this.name = new Label("Nome Utente");
 		this.password = new Label("Password");
@@ -36,12 +62,12 @@ public class LoginPage {
 		this.signIn = new JButton();
 		this.buttonSetup();
 		
-		this.form.add(name);
-		this.form.add(password);
-		this.form.add(nameField);
-		this.form.add(passwordField);
-		this.form.add(login);
-		this.form.add(signIn);
+		this.formName.add(name);
+		this.formPassword.add(password);
+		this.formNameField.add(nameField);
+		this.formPasswordField.add(passwordField);
+		this.formLogin.add(login);
+		this.formSignIn.add(signIn);
 		
 	}
 	
@@ -53,22 +79,23 @@ public class LoginPage {
 	}
 	
 	public void panelSetup() {
-		//this.form.setLayout(new FlowLayout());
+		this.form.setLayout(new GridLayout(3, 2));
 		this.form.setBackground(Color.cyan);
 	}
 	
 	public void labelSetup() {
 		//this.name.setAlignment(Label.CENTER);
 		this.name.setSize(20, 10);
-		this.name.setLocation(0, 50);
+		//this.name.setLocation(0, 50);
+		
 		//this.password.setAlignment(Label.CENTER);
 		this.password.setSize(20, 10);
-		this.password.setLocation(0, 50);
+		//this.password.setLocation(0, 50);
 	}
 	
 	public void textFieldSetup() {
-		this.nameField.setBounds(20, 20, 20, 20);
-		this.passwordField.setBounds(20, 20, 20, 20);
+		this.nameField.setPreferredSize(new Dimension(100, 30));
+		this.passwordField.setPreferredSize(new Dimension(100, 30));
 	}
 	
 	public void buttonSetup() {
