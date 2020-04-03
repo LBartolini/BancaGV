@@ -7,8 +7,8 @@ public class ClientThread extends Thread {
 	
 	private Socket client = null;
 	
-	private DataInputStream in;
-	private DataOutputStream out;
+	private BufferedReader in;
+	private PrintWriter out;
 	
 	public ClientThread(Socket client) {
 		this.client = client;
@@ -17,15 +17,15 @@ public class ClientThread extends Thread {
 	@Override
 	public void run() {
 		try {
-			this.in = new DataInputStream(client.getInputStream());
-			this.out = new DataOutputStream(client.getOutputStream());
+			this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			this.out = new PrintWriter(client.getOutputStream());
 		
 		
 			while(true) {
-			
-				String data = this.in.readLine();
-				System.out.println(data);
-
+				if(this.in.ready()) {
+					String data = this.in.readLine();
+					System.out.println(data);
+				}
 			}
 		} catch (IOException e) { e.printStackTrace();}
 	}

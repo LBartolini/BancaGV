@@ -9,8 +9,8 @@ public class Customer {
 	private int port;
 	private InetAddress ip;
 	
-	private DataInputStream in;
-	private DataOutputStream out;
+	private BufferedReader in;
+	private PrintWriter out;
 	
 	public Customer(int port, String ip) throws IOException {
 		this.port = port;
@@ -20,8 +20,12 @@ public class Customer {
 	public void connect() throws IOException{ // change to private
 		sock = new Socket(this.ip, this.port);
 		
-		this.in = new DataInputStream(sock.getInputStream());
-		this.out = new DataOutputStream(sock.getOutputStream());
+		this.in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+		this.out = new PrintWriter(sock.getOutputStream());
+		
+		while(true) {
+			this.out.println("bella");
+		}
 	}
 	
 	public static void main(String[] args) throws IOException {
