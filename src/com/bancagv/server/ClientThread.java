@@ -1,6 +1,7 @@
 package com.bancagv.server;
 
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.io.*;
 
 public class ClientThread extends Thread {
@@ -10,6 +11,8 @@ public class ClientThread extends Thread {
 	private BufferedReader in;
 	private PrintWriter out;
 	
+	private String name = "";
+	
 	public ClientThread(Socket client) {
 		this.client = client;
 	}
@@ -17,9 +20,8 @@ public class ClientThread extends Thread {
 	@Override
 	public void run() {
 		try {
-			this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-			this.out = new PrintWriter(client.getOutputStream());
-		
+			this.in = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
+			this.out = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8));
 		
 			while(true) {
 				if(this.in.ready()) {
@@ -27,7 +29,9 @@ public class ClientThread extends Thread {
 					System.out.println(data);
 				}
 			}
-		} catch (IOException e) { e.printStackTrace();}
+		} catch (IOException e) { 
+			e.printStackTrace();
+			}
 	}
 
 }
