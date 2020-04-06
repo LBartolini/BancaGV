@@ -20,7 +20,7 @@ public class LoginPage {
 	private TextField passwordField;
 	private JButton login;
 	private JButton signIn;
-	Customer customer;
+	private Customer customer;
 	
 	public LoginPage(Customer customer) {
 		this.customer = customer;
@@ -58,8 +58,8 @@ public class LoginPage {
 		this.passwordField = new TextField();
 		this.textFieldSetup();
 		
-		this.login = new JButton();
-		this.signIn = new JButton();
+		this.login = new JButton("Login");
+		this.signIn = new JButton("Sign in");
 		this.buttonSetup();
 		
 		this.formName.add(name);
@@ -68,7 +68,7 @@ public class LoginPage {
 		this.formPasswordField.add(passwordField);
 		this.formLogin.add(login);
 		this.formSignIn.add(signIn);
-		
+		this.checkAccount();
 	}
 	
 	public void frameSetup() {
@@ -100,6 +100,16 @@ public class LoginPage {
 	
 	public void buttonSetup() {
 		
+	}
+	
+	public void checkAccount() {
+		Boolean check = true;
+		if(check) {
+			System.out.println("Fatto!");
+		}
+		else {
+			System.out.println("Errato!");
+		}
 	}
 }
 
