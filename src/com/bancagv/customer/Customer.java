@@ -34,7 +34,7 @@ public class Customer {
 			this.connected = false;
 		}	
 		try {
-			this.auth("lorebart", "1234", 1);
+			this.auth("lorebart", "abc123", 1);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,15 +52,12 @@ public class Customer {
 				this.out.println("login|"+name+"|"+passw+"|");	
 			}
 			this.out.flush();
-			while(true) {
-				if(this.in.ready()) { // get the result from the server
-					List<String> result = Utils.split(this.in.readLine(), '|');
-					if(result.get(0).compareTo("auth") == 0) {
-						ret = true;
-						this.name = name; 
-					}
-					break;
-				}
+			System.out.println("READY");
+			List<String> result = Utils.split(this.in.readLine(), '|');
+			System.out.println(result);
+			if(result.get(0).compareTo("auth") == 0) {
+				ret = true;
+				this.name = name; 
 			}
 		}
 		
@@ -68,7 +65,7 @@ public class Customer {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Customer c = new Customer(5000, "127.0.0.1");
+		Customer c = new Customer(5000, "192.168.1.5");
 		c.connect();
 	}
 
