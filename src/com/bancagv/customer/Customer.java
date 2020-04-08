@@ -9,11 +9,6 @@ import java.io.*;
 import com.bancagv.customer.graphic.*;
 
 public class Customer {
-	public Customer() {
-		//LoginPage p = new LoginPage(this);
-		HomePage h = new HomePage(this);
-	}
-
 	private Socket sock = null;
 	private int port;
 	private InetAddress ip;
@@ -26,6 +21,7 @@ public class Customer {
 
 
 	public Customer(int port, String ip) throws IOException {
+		LoginPage p = new LoginPage(this);
 		this.port = port;
 		this.ip = InetAddress.getByName(ip);
 		this.connected = false;
@@ -41,14 +37,14 @@ public class Customer {
 		try {
 			this.in = new BufferedReader(new InputStreamReader(sock.getInputStream(), StandardCharsets.UTF_8));
 			this.out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream(), StandardCharsets.UTF_8));
-		} catch (IOException e1) {
+		} catch (Exception e1) {
 			System.out.println("buffer");
 		}
 		this.connected = true;
 		//DA RIMUOVERE SOLO PER TEST
 		try {
 			this.auth("lorebart", "abc123", 1);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("auth");
 		}
 	}
