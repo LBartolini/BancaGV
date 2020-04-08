@@ -23,4 +23,8 @@ public class Utils {
 		
 		return result;
 	}
+	
+	static public void print(String stringa) {
+		System.out.println(stringa);
+	}
 }

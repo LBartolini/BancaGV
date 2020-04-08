@@ -22,6 +22,7 @@ public class ClientThread extends Thread {
 	public ClientThread(Socket client, Server server) {
 		this.client = client;
 		this.server = server;
+		System.out.println(client.getPort()+ " "+ client.getLocalPort()+ " "+ client.getInetAddress()+ " " +client.getRemoteSocketAddress());
 	}
 	
 	@Override
@@ -39,22 +40,25 @@ public class ClientThread extends Thread {
 						FileHandler user = this.server.getUser(split_data.get(1));
 						if(user != null) {
 							//user exist
-							user.open(this);
+							// user.open(this);
+							this.out.flush();
 							if(this.auth(user.getReader(), split_data.get(2))) {
 								// user logged in
-								this.out.println("auth");
+								for(int i = 0; i < 100000; i++) {
+									this.out.println("auth"+i);
+								}
 							}else {
 								// wrong password
 								this.out.println("wrong");
 							}
-							user.close(this);
+							// user.close(this);
 						}
 					}
 				}
 			}
 		} catch (IOException e) { 
 			e.printStackTrace();
-			}
+		}
 	}
 	
 	private boolean auth(Scanner reader, String passw) {

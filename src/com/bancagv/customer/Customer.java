@@ -1,10 +1,11 @@
 package com.bancagv.customer;
 
 import java.net.*;
+import com.bancagv.utils.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
-import com.bancagv.utils.*;
 
 public class Customer {
 	
@@ -22,22 +23,28 @@ public class Customer {
 	public Customer(int port, String ip) throws IOException {
 		this.port = port;
 		this.ip = InetAddress.getByName(ip);
+		this.connected = false;
 	}
 	
 	public void connect(){ // change to private
 		try {
 			sock = new Socket(this.ip, this.port);
-			this.connected = true;
+		} catch (IOException e1) {
+			System.out.println("connection");
+		}
+			
+		try {
 			this.in = new BufferedReader(new InputStreamReader(sock.getInputStream(), StandardCharsets.UTF_8));
-			this.out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream(), StandardCharsets.UTF_8));
-		} catch (IOException e) {
-			this.connected = false;
-		}	
+			this.out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream(), StandardCharsets.UTF_8));	
+		} catch (IOException e1) {
+			System.out.println("buffer");
+		}
+		this.connected = true;
+		//DA RIMUOVERE SOLO PER TEST
 		try {
 			this.auth("lorebart", "abc123", 1);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("auth");
 		}
 	}
 	
@@ -51,8 +58,18 @@ public class Customer {
 			}else { // login	
 				this.out.println("login|"+name+"|"+passw+"|");	
 			}
+			System.out.println(sock.getPort()+ " "+ sock.getLocalPort()+ " "+ sock.getInetAddress()+ " " +sock.getRemoteSocketAddress());
 			this.out.flush();
-			System.out.println("READY");
+			
+			/*
+			List<String> tmp = new ArrayList<String>();
+			
+			tmp.add(this.in.readLine());
+			
+			for(String s: tmp) {
+				Utils.print(s);
+			}
+			*/
 			List<String> result = Utils.split(this.in.readLine(), '|');
 			System.out.println(result);
 			if(result.get(0).compareTo("auth") == 0) {
@@ -65,7 +82,7 @@ public class Customer {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Customer c = new Customer(5000, "192.168.1.5");
+		Customer c = new Customer(6000, "127.0.0.1");
 		c.connect();
 	}
 

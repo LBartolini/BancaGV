@@ -1,11 +1,19 @@
 package com.bancagv.server;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
+import com.bancagv.utils.Utils;
 
 public class Server {
 	
@@ -13,6 +21,9 @@ public class Server {
 	
 	private ServerSocket server = null;
 	private int port;
+	
+	private BufferedReader in;
+	private PrintWriter out; 
 	
 	public Server(int port) throws IOException {
 		this.port = port;
@@ -67,7 +78,7 @@ public class Server {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Server s = new Server(5000);
+		Server s = new Server(6000);
 		s.startListening();
 	}
 	
