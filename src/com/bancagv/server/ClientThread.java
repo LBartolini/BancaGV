@@ -40,18 +40,16 @@ public class ClientThread extends Thread {
 						FileHandler user = this.server.getUser(split_data.get(1));
 						if(user != null) {
 							//user exist
-							// user.open(this);
-							this.out.flush();
+							user.open(this);
 							if(this.auth(user.getReader(), split_data.get(2))) {
 								// user logged in
-								for(int i = 0; i < 100000; i++) {
-									this.out.println("auth"+i);
-								}
+								this.out.println("auth");
 							}else {
 								// wrong password
 								this.out.println("wrong");
 							}
-							// user.close(this);
+							this.out.flush();
+							user.close(this);
 						}
 					}
 				}

@@ -21,7 +21,7 @@ public class Customer {
 
 
 	public Customer(int port, String ip) throws IOException {
-		LoginPage p = new LoginPage(this);
+		new LoginPage(this);
 		this.port = port;
 		this.ip = InetAddress.getByName(ip);
 		this.connected = false;
@@ -62,17 +62,7 @@ public class Customer {
 			System.out.println(sock.getPort()+ " "+ sock.getLocalPort()+ " "+ sock.getInetAddress()+ " " +sock.getRemoteSocketAddress());
 			this.out.flush();
 
-			/*
-			List<String> tmp = new ArrayList<String>();
-
-			tmp.add(this.in.readLine());
-
-			for(String s: tmp) {
-				Utils.print(s);
-			}
-			*/
 			List<String> result = Utils.split(this.in.readLine(), '|');
-			System.out.println(result);
 			if(result.get(0).compareTo("auth") == 0) {
 				ret = true;
 				this.name = name;
