@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.swing.*;
 
 import com.bancagv.customer.Customer;
+import com.bancagv.utils.Utils;
 public class LoginPage {
 	private JFrame frame;
 	private JPanel form;
@@ -113,8 +114,6 @@ public class LoginPage {
 				checkAccount(0); // login = 1, register = 0
 			}
 		});
-		// this.checkAccount();
-		// bind this to button click
 	}
 	
 	public void checkAccount(int mode) {
@@ -122,7 +121,7 @@ public class LoginPage {
 		try {
 			check = this.customer.auth(this.nameField.getText(), this.passwordField.getText(), mode);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Utils.print("ERRORE!!!");
 		}
 		if(check) {
 			this.frame.dispose();
