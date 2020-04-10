@@ -22,9 +22,6 @@ public class Server {
 	private ServerSocket server = null;
 	private int port;
 	
-	private BufferedReader in;
-	private PrintWriter out; 
-	
 	public Server(int port) throws IOException {
 		this.port = port;
 		this.bankaccounts = new ArrayList<FileHandler>();
@@ -48,6 +45,15 @@ public class Server {
 	public FileHandler getUser(String name) {
 		for(FileHandler file: this.users) {
 			if(file.getName().compareTo(name) == 0) {
+				return file;
+			}
+		}
+		return null;
+	}
+	
+	public FileHandler getBA(String code) {
+		for(FileHandler file: this.bankaccounts) {
+			if(file.getName().compareTo(code) == 0) {
 				return file;
 			}
 		}

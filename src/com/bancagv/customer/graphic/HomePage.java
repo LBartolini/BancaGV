@@ -24,6 +24,7 @@ public class HomePage {
 	private JButton deposit;
 	
 	private Customer customer;
+	
 	public HomePage(Customer customer) {
 		this.customer = customer;
 		this.frame = new JFrame();
@@ -44,7 +45,7 @@ public class HomePage {
 		
 		this.name = new Label("nome", SwingConstants.CENTER);
 		this.nCC = new Label("ABC123");
-		this.bankAccount = new Label("50€");
+		this.bankAccount = new Label("50ï¿½");
 		this.actionBankAccount = new TextField();
 		this.take = new JButton("Preleva");
 		this.deposit = new JButton("Versa");
@@ -67,6 +68,12 @@ public class HomePage {
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setResizable(false);
 		this.frame.setVisible(true);
+		this.frame.addWindowListener(new java.awt.event.WindowAdapter() {
+		    		@Override
+		    		public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    			customer.close();
+		    			System.exit(0);		    		}
+		    	});
 	}
 	
 	public void panelSetup() {

@@ -105,18 +105,28 @@ public class LoginPage {
 		this.login.addActionListener(new ActionListener() {
 			@Override 
 			public void actionPerformed(ActionEvent e) {
-				checkAccount(1); // login = 1, register = 0
+				try {
+					checkAccount(1);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} // login = 1, register = 0
 			}
 		});
 		this.signIn.addActionListener(new ActionListener() {
 			@Override 
 			public void actionPerformed(ActionEvent e) {
-				checkAccount(0); // login = 1, register = 0
+				try {
+					checkAccount(0);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} // login = 1, register = 0
 			}
 		});
 	}
 	
-	public void checkAccount(int mode) {
+	public void checkAccount(int mode) throws IOException {
 		Boolean check=false;
 		try {
 			check = this.customer.auth(this.nameField.getText(), this.passwordField.getText(), mode);
@@ -125,6 +135,7 @@ public class LoginPage {
 		}
 		if(check) {
 			this.frame.dispose();
+			this.customer.getData();
 			new HomePage(this.customer);
 		}
 		else {

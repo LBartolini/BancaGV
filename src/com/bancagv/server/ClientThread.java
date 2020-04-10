@@ -18,6 +18,7 @@ public class ClientThread extends Thread {
 	private PrintWriter out;
 	
 	private String name = "";
+	private String bankcode= "";
 	
 	public ClientThread(Socket client, Server server) {
 		this.client = client;
@@ -43,7 +44,8 @@ public class ClientThread extends Thread {
 							String[] bankcode = new String[1];
 							if(this.auth(user.getReader(), split_data.get(2), bankcode)) {
 								// user logged in
-								this.out.println("auth|"+bankcode[0]);
+								this.bankcode = bankcode[0];
+								this.out.println("auth|"+this.bankcode+"|");
 							}else {
 								// wrong password
 								this.out.println("wrong");
@@ -51,6 +53,16 @@ public class ClientThread extends Thread {
 							// this.out.flush();
 							user.close(this);
 						}
+					}else if(split_data.get(0).compareTo("querycc") == 0) {
+						FileHandler ba = this.server.getBA(split_data.get(1)); // BA = bank account, conto corrente
+						ba.open(this);
+						Scanner tmp = ba.getReader();
+						tmp.next();
+						double balance = tmp.nextDouble();
+						this.out.println(balance+"|");
+						ba.close(this);
+					}else if(split_data.get(0).compareTo("close") == 0) {
+						this.server.getBA(this.bankcode).close(this);
 					}
 				}
 			}

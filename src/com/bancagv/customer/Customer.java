@@ -17,8 +17,9 @@ public class Customer {
 	private PrintWriter out;
 
 	private boolean connected;
-	private String name;
-	private String bankcode;
+	private String name="";
+	private String bankcode="";
+	private double balance=0;
 
 
 	public Customer(int port, String ip) throws IOException {
@@ -26,9 +27,10 @@ public class Customer {
 		this.port = port;
 		this.ip = InetAddress.getByName(ip);
 		this.connected = false;
+		this.connect();
 	}
 
-	public void connect(){ // change to private
+	private void connect(){ // change to private
 		try {
 			sock = new Socket(this.ip, this.port);
 		} catch (IOException e1) {
@@ -44,6 +46,40 @@ public class Customer {
 			return;
 		}
 		this.connected = true;
+	}
+	
+	public void close() {
+		this.out.println("close");
+	}
+	
+	public double getBalance() {
+		return this.balance;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public String getBankCode() {
+		return this.bankcode;
+	}
+	
+	public void getData() throws IOException {
+		if(this.name.compareTo("") != 0 && this.bankcode.compareTo("") != 0 && this.bankcode.compareTo("null") != 0) {
+			// connected and bank account exist and is binded to the user
+			this.out.println("querycc|"+this.bankcode+"|");
+			
+			List<String> temp = Utils.split(this.in.readLine(), '|'); // [0] = balance
+			this.balance = Double.parseDouble(temp.get(0));
+		}
+	}
+	
+	public boolean isAccountConnected() {
+		if(this.bankcode.compareTo("null") == 0) {
+			return false;
+		}else {
+			return true;
+		}
 	}
 
 	public boolean auth(String name, String passw, int mode) throws IOException { // mode : 0 = signin, else(default 1) = login
@@ -70,7 +106,6 @@ public class Customer {
 
 	public static void main(String[] args) throws IOException {
 		Customer c = new Customer(6000, "127.0.0.1");
-		c.connect();
 	}
 
 }
