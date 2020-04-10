@@ -1,10 +1,14 @@
 package com.bancagv.customer.graphic;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.*;
 
 import com.bancagv.customer.Customer;
+import com.bancagv.utils.Utils;
 public class LoginPage {
 	private JFrame frame;
 	private JPanel form;
@@ -68,7 +72,6 @@ public class LoginPage {
 		this.formPasswordField.add(passwordField);
 		this.formLogin.add(login);
 		this.formSignIn.add(signIn);
-		this.checkAccount();
 	}
 	
 	public void frameSetup() {
@@ -99,13 +102,30 @@ public class LoginPage {
 	}
 	
 	public void buttonSetup() {
-		
+		this.login.addActionListener(new ActionListener() {
+			@Override 
+			public void actionPerformed(ActionEvent e) {
+				checkAccount(1); // login = 1, register = 0
+			}
+		});
+		this.signIn.addActionListener(new ActionListener() {
+			@Override 
+			public void actionPerformed(ActionEvent e) {
+				checkAccount(0); // login = 1, register = 0
+			}
+		});
 	}
 	
-	public void checkAccount() {
-		Boolean check = true;
+	public void checkAccount(int mode) {
+		Boolean check=false;
+		try {
+			check = this.customer.auth(this.nameField.getText(), this.passwordField.getText(), mode);
+		} catch (IOException e) {
+			Utils.print("ERRORE!!!");
+		}
 		if(check) {
-			System.out.println("Fatto!");
+			this.frame.dispose();
+			new HomePage(this.customer);
 		}
 		else {
 			System.out.println("Errato!");
