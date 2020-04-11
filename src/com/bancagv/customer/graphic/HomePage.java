@@ -1,6 +1,10 @@
 package com.bancagv.customer.graphic;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.concurrent.Semaphore;
 
 import javax.swing.*;
 
@@ -43,9 +47,10 @@ public class HomePage {
 		this.form.add(formActionBankAccount);
 		this.frame.add(form);
 		
-		this.name = new Label("nome", SwingConstants.CENTER);
-		this.nCC = new Label("ABC123");
-		this.bankAccount = new Label("50�");
+		this.name = new Label(this.customer.getName(), SwingConstants.CENTER);
+		this.nCC = new Label(this.customer.getBankCode());
+		this.bankAccount = new Label(this.customer.getBalance() + " Euro");
+		this.customer.startUpdating(this);
 		this.actionBankAccount = new TextField();
 		this.take = new JButton("Preleva");
 		this.deposit = new JButton("Versa");
@@ -91,8 +96,42 @@ public class HomePage {
 	public void buttonSetup() {
 		this.take.setPreferredSize(new Dimension(100, 30));
 		this.take.setBackground(Color.red);
+		this.take.addActionListener(new ActionListener() {
+			@Override 
+			public void actionPerformed(ActionEvent e) {
+				take();
+			}
+		});
+		
 		this.deposit.setPreferredSize(new Dimension(100, 30));
 		this.deposit.setBackground(Color.green);
-		
+		this.deposit.addActionListener(new ActionListener() {
+			@Override 
+			public void actionPerformed(ActionEvent e) {
+				deposit();
+			}
+		});
+	}
+	
+	private void take() {
+		try {
+			this.customer.withdraw(Double.parseDouble(this.actionBankAccount.getText()));
+		}catch(Exception e){
+			// wrong chars in text field
+		}
+		this.actionBankAccount.setText("");
+	}
+	
+	private void deposit() {
+		try {
+			this.customer.pour(Double.parseDouble(this.actionBankAccount.getText()));
+		}catch(Exception e){
+			// wrong chars in text field
+		}
+		this.actionBankAccount.setText("");
+	}
+	
+	public void updateBalance(String new_balance) {
+		this.bankAccount.setText(new_balance+" Euro");
 	}
 }

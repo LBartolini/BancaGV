@@ -29,7 +29,7 @@ public class Customer {
 		this.connected = false;
 		this.connect();
 	}
-
+	
 	private void connect(){ // change to private
 		try {
 			sock = new Socket(this.ip, this.port);
@@ -46,6 +46,14 @@ public class Customer {
 			return;
 		}
 		this.connected = true;
+	}
+	
+	public void pour(double value) {
+		this.out.println("pourmoney|"+value);
+	}
+	
+	public void withdraw(double value) {
+		this.out.println("withdraw|"+value);
 	}
 	
 	public void close() {
@@ -80,6 +88,11 @@ public class Customer {
 		}else {
 			return true;
 		}
+	}
+	
+	public void startUpdating(HomePage hp) {
+		Updater u = new Updater(this, hp, this.in);
+		u.start();
 	}
 
 	public boolean auth(String name, String passw, int mode) throws IOException { // mode : 0 = signin, else(default 1) = login

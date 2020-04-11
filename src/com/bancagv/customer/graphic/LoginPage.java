@@ -79,6 +79,12 @@ public class LoginPage {
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setResizable(false);
 		this.frame.setVisible(true);
+		this.frame.addWindowListener(new java.awt.event.WindowAdapter() {
+    		@Override
+    		public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+    			customer.close();
+    			System.exit(0);		    		}
+    	});
 	}
 	
 	public void panelSetup() {

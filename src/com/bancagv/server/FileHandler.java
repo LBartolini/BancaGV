@@ -7,12 +7,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
+import com.bancagv.utils.*;
 
 public class FileHandler {
 
-	private Semaphore mutex;
+	private Semaphore mutex, mutex_online;
 	private ClientThread now;
 	private String file_path;
 	
@@ -28,22 +30,38 @@ public class FileHandler {
 		this.file = new File(file_path);
 		this.file_name = this.file.getName().replaceFirst(".txt", "");
 		this.mutex = new Semaphore(1);
+		this.mutex_online = new Semaphore(1);
 	}
 	
-	public void removeOffline(ClientThread ct) {
+	public List<ClientThread> getCustomersOnline(){
+		try {
+			this.mutex_online.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return this.customers_online;
+	}
+	
+	public void finishedUpdate() {
+		this.mutex_online.release();
+	}
+	
+	public void removeOffline(ClientThread ct) throws InterruptedException {
+		this.mutex_online.acquire();
 		for(int i = 0; i < this.customers_online.size(); i++) {
 			if(this.customers_online.get(i) == ct){
 				this.customers_online.remove(i);
 				break;
 			}
 		}
+		this.mutex_online.release();
 	}
 	
 	public void open(ClientThread ct) {
 		try {
 			this.mutex.acquire();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 		boolean exist = false;
 		for(ClientThread cust : this.customers_online) {
@@ -53,7 +71,14 @@ public class FileHandler {
 			}
 		}
 		if(!(exist)) {
+			try {
+				this.mutex_online.acquire();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			this.customers_online.add(ct);
+			this.mutex_online.release();
 		}
 		this.now = ct;
 	}
@@ -72,6 +97,7 @@ public class FileHandler {
 	public Scanner getReader() {
 		try {
 			this.reader = new Scanner(this.file);
+			this.reader.useLocale(Locale.US);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,8 +109,6 @@ public class FileHandler {
 		try {
 			this.writer = new BufferedWriter(new FileWriter(this.file_path));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return this.writer;
 	}
