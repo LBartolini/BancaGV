@@ -112,6 +112,8 @@ public class LoginPage {
 			@Override 
 			public void actionPerformed(ActionEvent e) {
 				checkAccount(0); // login = 1, register = 0
+				new NewUserPage();
+				frame.dispose();
 			}
 		});
 	}
