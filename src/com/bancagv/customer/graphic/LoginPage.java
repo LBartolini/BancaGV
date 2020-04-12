@@ -111,42 +111,52 @@ public class LoginPage {
 		this.login.addActionListener(new ActionListener() {
 			@Override 
 			public void actionPerformed(ActionEvent e) {
+				boolean ret = false;
 				try {
-					checkAccount(1);
+					ret = checkAccount(1);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} // login = 1, register = 0
-			}
+				
+				if(ret) {
+					frame.dispose();
+					try {
+						customer.getData();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					new HomePage(customer);
+					}
+				}
 		});
 		this.signIn.addActionListener(new ActionListener() {
 			@Override 
 			public void actionPerformed(ActionEvent e) {
+				boolean ret = false;
 				try {
-					checkAccount(0);
+					ret = checkAccount(0);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} // login = 1, register = 0
+				if(ret) {
+					new NewUserPage();
+					frame.dispose();
+				}
 			}
 		});
 	}
 	
-	public void checkAccount(int mode) throws IOException {
-		Boolean check=false;
+	public boolean checkAccount(int mode) throws IOException {
+		boolean check=false;
 		try {
 			check = this.customer.auth(this.nameField.getText(), this.passwordField.getText(), mode);
 		} catch (IOException e) {
 			Utils.print("ERRORE!!!");
 		}
-		if(check) {
-			this.frame.dispose();
-			this.customer.getData();
-			new HomePage(this.customer);
-		}
-		else {
-			System.out.println("Errato!");
-		}
+		return check;
 	}
 }
 
