@@ -19,7 +19,6 @@ public class ClientThread extends Thread {
 	private BufferedReader in;
 	private PrintWriter out;
 	
-	private String name = "";
 	private String bankcode= "null";
 	
 	public ClientThread(Socket client, Server server) {
@@ -60,12 +59,51 @@ public class ClientThread extends Thread {
 					}else if(split_data.get(0).compareTo("withdraw") == 0) {
 						// withdraw, prelevare
 						this.withdraw(split_data);
+					}else if(split_data.get(0).compareTo("adduser") == 0) {
+						// bind user to bank account
+						this.adduser(split_data);
+					}else if(split_data.get(0).compareTo("deluser") == 0) {
+						// remove binding bank account-user
+						this.deluser(split_data);
 					}
 				}
 			}
 		} catch (Exception e) { 
 			e.printStackTrace();
 		}
+	}
+	
+	private void adduser(List<String> input) throws Exception { // 0 = adduser, 1 = username, 2 = code
+		String code = input.get(2);
+		if(code.compareTo("null") == 0) {
+			// create new BA
+			code = this.server.createNewBA();
+		}
+		boolean ret = this.server.bindBA(input.get(1), code, this);
+		
+		this.mutex_out.acquire();
+		if(ret) {
+			// ok
+			this.out.println("ok");
+		}else {
+			// not ok
+			this.out.println("wrong");
+		}
+		this.mutex_out.release();
+	}
+	
+	private void deluser(List<String> input) throws Exception {
+		boolean ret = this.server.unbindBA(input.get(1), this);
+		
+		this.mutex_out.acquire();
+		if(ret) {
+			// ok
+			this.out.println("ok");
+		}else {
+			// not ok
+			this.out.println("wrong");
+		}
+		this.mutex_out.release();
 	}
 	
 	private void pour(List<String> input) throws IOException, InterruptedException {

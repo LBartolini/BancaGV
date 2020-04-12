@@ -27,6 +27,8 @@ public class Server {
 	private ServerSocket server = null;
 	private int port;
 	
+	private int CODE_LENGTH = 10;
+	
 	public Server(int port) throws IOException {
 		this.port = port;
 		this.bankaccounts = new ArrayList<FileHandler>();
@@ -59,21 +61,37 @@ public class Server {
 	}
 	
 	public FileHandler getUser(String name) {
+		FileHandler ret=null;
+		try {
+			this.mutex_users.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for(FileHandler file: this.users) {
 			if(file.getName().compareTo(name) == 0) {
-				return file;
+				ret = file;
 			}
 		}
-		return null;
+		this.mutex_users.release();
+		return ret;
 	}
 	
 	public FileHandler getBA(String code) {
+		FileHandler ret=null;
+		try {
+			this.mutex_bankaccounts.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for(FileHandler file: this.bankaccounts) {
 			if(file.getName().compareTo(code) == 0) {
-				return file;
+				ret = file;
 			}
 		}
-		return null;
+		this.mutex_bankaccounts.release();
+		return ret;
 	}
 	
 	private void initDB() {
@@ -107,6 +125,68 @@ public class Server {
 		
 		this.mutex_bankaccounts.release();
 		this.mutex_users.release();
+	}
+	
+	public String createNewBA() throws Exception {
+		String code = "null";
+		boolean found = false;
+		while(!(found)) {
+			code = Utils.getAlphaNumericString(this.CODE_LENGTH);
+
+			if(this.getBA(code) == null) {
+				found = true;
+			}
+		}
+		this.mutex_bankaccounts.acquire();
+		
+		File new_ba = new File("database/bankaccounts/"+code+".txt");
+		new_ba.createNewFile();
+		BufferedWriter wrt = new BufferedWriter(new FileWriter(new_ba));
+		wrt.write(code+" 0");
+		wrt.close();
+		this.bankaccounts.add(new FileHandler("database/bankaccounts/"+code+".txt"));
+		
+		this.mutex_bankaccounts.release();
+		return code;
+	}
+	
+	public boolean bindBA(String name, String code, ClientThread ct) throws IOException {
+		boolean ret = false;
+		FileHandler user;
+		if(((user = this.getUser(name)) != null) && (this.getBA(code) != null)) {
+			// user and ba exist
+			user.open(ct);
+			Scanner rdr = user.getReader();
+			rdr.next(); // name that we already have
+			String psw = rdr.next();
+			rdr.close();
+			BufferedWriter wrt = user.getWriter();
+			wrt.write(name+" "+psw+" "+code);
+			wrt.close();
+			user.close(ct);
+			ret = true;
+		}
+		
+		return ret;
+	}
+	
+	public boolean unbindBA(String name, ClientThread ct) throws Exception {
+		boolean ret = false;
+		FileHandler user;
+		if((user = this.getUser(name)) != null) {
+			// user and ba exist
+			user.open(ct);
+			Scanner rdr = user.getReader();
+			rdr.next(); // name that we already have
+			String psw = rdr.next();
+			rdr.close();
+			BufferedWriter wrt = user.getWriter();
+			wrt.write(name+" "+psw+" null");
+			wrt.close();
+			user.close(ct);
+			ret = true;
+		}
+		return ret;
 	}
 	
 	public boolean createUser(String name, String passw) throws IOException {

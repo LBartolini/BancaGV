@@ -1,10 +1,13 @@
 package com.bancagv.operator.graphic;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
 import com.bancagv.operator.Operator;
+import com.bancagv.utils.*;
 
 public class HomePage {
 	private Operator operator;
@@ -27,6 +30,8 @@ public class HomePage {
 	private JButton delAccount;
 	
 	public HomePage(Operator operator) {
+		this.operator = operator;
+		
 		this.frame = new JFrame();
 		this.mainPanel = new JPanel();
 		this.namePanel = new JPanel();
@@ -70,6 +75,12 @@ public class HomePage {
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setResizable(false);
 		this.frame.setVisible(true);
+		this.frame.addWindowListener(new java.awt.event.WindowAdapter() {
+    		@Override
+    		public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+    			operator.close();
+    			System.exit(0);		    		}
+    	});
 	}
 	
 	public void mainPanelSetup() {
@@ -89,6 +100,30 @@ public class HomePage {
 	
 	public void buttonSetup() {
 		this.addAccount.setPreferredSize(new Dimension(100, 30));
+		this.addAccount.addActionListener(new ActionListener() {
+			@Override 
+			public void actionPerformed(ActionEvent e) {
+				boolean ret = false;
+				ret = operator.add(name.getText(), code.getText());
+				if(ret) {
+					Utils.print("OK");
+				}else {
+					Utils.print("NO");
+				}
+			}
+		});
 		this.delAccount.setPreferredSize(new Dimension(100, 30));
+		this.delAccount.addActionListener(new ActionListener() {
+			@Override 
+			public void actionPerformed(ActionEvent e) {
+				boolean ret = false;
+				ret = operator.remove(name.getText());
+				if(ret) {
+					Utils.print("OK");
+				}else {
+					Utils.print("NO");
+				}
+			}
+		});
 	}
 }

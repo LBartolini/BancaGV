@@ -120,7 +120,6 @@ public class LoginPage {
 				} // login = 1, register = 0
 				
 				if(ret) {
-					frame.dispose();
 					try {
 						customer.getData();
 					} catch (IOException e1) {
@@ -128,6 +127,7 @@ public class LoginPage {
 						e1.printStackTrace();
 					}
 					new HomePage(customer);
+					frame.dispose();
 					}
 				}
 		});
@@ -142,7 +142,7 @@ public class LoginPage {
 					e1.printStackTrace();
 				} // login = 1, register = 0
 				if(ret) {
-					new NewUserPage();
+					new NewUserPage(customer);
 					frame.dispose();
 				}
 			}

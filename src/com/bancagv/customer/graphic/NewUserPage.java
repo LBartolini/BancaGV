@@ -3,14 +3,21 @@ package com.bancagv.customer.graphic;
 import java.awt.*;
 import javax.swing.*;
 
+import com.bancagv.customer.Customer;
+
 public class NewUserPage {
+	
 	private JFrame frame;
 	private JPanel panel;
 	private Label text1;
 	private Label text2;
 	
+	private Customer customer;
 	
-	public NewUserPage() {
+	
+	public NewUserPage(Customer customer) {
+		this.customer = customer;
+		
 		this.frame = new JFrame();
 		this.panel = new JPanel();
 		this.text1 = new Label("Nessun conto corrente collegato");
@@ -30,6 +37,13 @@ public class NewUserPage {
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setResizable(false);
 		this.frame.setVisible(true);
+		this.frame.addWindowListener(new java.awt.event.WindowAdapter() {
+    		@Override
+    		public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+    			customer.close();
+    			System.exit(0);
+    		}
+    	});
 	}
 	
 	public void panelSetup() {
