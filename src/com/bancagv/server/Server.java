@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
+import java.lang.management.ManagementFactory;
 
 import com.bancagv.utils.Utils;
 
@@ -45,7 +46,6 @@ public class Server {
 			Socket client = this.server.accept();
 			
 			System.out.println("Connected with [" + client.getInetAddress() + ":" + client.getPort() + "]");
-			
 			ClientThread ct = new ClientThread(client, this);
 			ct.setDaemon(true);
 			ct.start();
@@ -183,6 +183,13 @@ public class Server {
 			BufferedWriter wrt = user.getWriter();
 			wrt.write(name+" "+psw+" null");
 			wrt.close();
+			// send disconnection message to client
+			for(ClientThread client_thread: user.getCustomersOnline()) {
+				if(client_thread.getUsername().compareTo(name) == 0) {
+					client_thread.disconnectFromBA();
+				}
+			}
+			user.finishedUpdate();
 			user.close(ct);
 			ret = true;
 		}

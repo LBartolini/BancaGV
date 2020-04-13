@@ -76,9 +76,20 @@ public class HomePage {
 		this.frame.addWindowListener(new java.awt.event.WindowAdapter() {
 		    		@Override
 		    		public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-		    			customer.close();
-		    			System.exit(0);		    		}
+		    				close();
+		    				}
 		    	});
+	}
+	
+	public void close() {
+		customer.close();
+		this.frame.dispose();
+	}
+	
+	public void close(String x) {
+		customer.close();
+		new Disconnected();
+		this.frame.dispose();
 	}
 	
 	public void panelSetup() {

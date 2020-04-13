@@ -20,6 +20,7 @@ public class ClientThread extends Thread {
 	private PrintWriter out;
 	
 	private String bankcode= "null";
+	private String name="";
 	
 	public ClientThread(Socket client, Server server) {
 		this.client = client;
@@ -174,6 +175,7 @@ public class ClientThread extends Thread {
 			if(this.auth(user.getReader(), input.get(2), bankcode)) {
 				// user logged in
 				this.bankcode = bankcode[0];
+				this.name = input.get(1);
 				this.out.println("auth|"+this.bankcode+"|");
 			}else {
 				// wrong password
@@ -200,6 +202,7 @@ public class ClientThread extends Thread {
 			this.server.getBA(this.bankcode).removeOffline(this);
 		}
 		Utils.print("Client ["+this.client.getInetAddress()+":"+this.client.getPort()+"] disconnected!");
+		this.interrupt(); // stops the thread if the connection with the client is closed
 	}
 	
 	private boolean auth(Scanner reader, String passw, String[] bankcode) {
@@ -215,5 +218,21 @@ public class ClientThread extends Thread {
 		}
 		
 		return ret;
+	}
+	
+	public void disconnectFromBA() {
+		try {
+			this.mutex_out.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.out.println("disconnect");
+		
+		this.mutex_out.release();
+	}
+	
+	public String getUsername() {
+		return this.name;
 	}
 }

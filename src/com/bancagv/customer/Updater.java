@@ -3,7 +3,7 @@ package com.bancagv.customer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import com.bancagv.utils.*;
-
+import com.bancagv.customer.graphic.Disconnected;
 import com.bancagv.customer.graphic.HomePage;
 
 public class Updater extends Thread{
@@ -20,17 +20,18 @@ public class Updater extends Thread{
 	
 	@Override
 	public void run() {
-		while(true) {
+		boolean active = true;
+		while(active) {
 			try {
 				if(this.in.ready()) {
-					String new_balance="";
-					try {
-						new_balance = this.in.readLine();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					String data="";
+					data = this.in.readLine();
+					if(data.compareTo("disconnect")==0) {
+						this.homepage.close("disconnected");
+						active = false;
+					}else {
+					this.homepage.updateBalance(data);
 					}
-					this.homepage.updateBalance(new_balance);
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

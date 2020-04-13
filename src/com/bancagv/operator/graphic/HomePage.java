@@ -69,6 +69,7 @@ public class HomePage {
 		this.createAccount.add(addAccount);
 		this.removeAccount.add(delAccount);
 	}
+
 	
 	public void frameSetup() {
 		this.frame.setBounds(300, 300, 300, 300);
@@ -79,7 +80,8 @@ public class HomePage {
     		@Override
     		public void windowClosing(java.awt.event.WindowEvent windowEvent) {
     			operator.close();
-    			System.exit(0);		    		}
+    			System.exit(0);	
+    		}
     	});
 	}
 	
@@ -126,4 +128,5 @@ public class HomePage {
 			}
 		});
 	}
+	
 }
