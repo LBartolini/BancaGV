@@ -22,7 +22,7 @@ Per prima cosa è stata prevista la possibilità di *Creare* o *Accedere* al pro
 
 Successivamente se decidiamo di creare un nuovo *profilo* verrà visualizzata una finestra che ci esorta a contattare un'*operatore* per collegare al nostro nuovo *profilo* un *conto corrente*. Nel caso in cui avessimo già creato un *profilo* e lo avessimo già collegato ad un *conto corrente*,  verremo direzionati alla *HomePage* dell'applicazione lato ***Customer***.
 
-Questa pagina ci permetterà di compiere 2 azioni: *Prelevare* e *Depositare*. NB- E' ovvio che sia impossibile depositare e prelevare denaro contante attraverso un'applicazione software ma la nostra è più una simulazione del processo che, con un pò di immaginazione, può avvenire all'interno degli sportelli ATM.
+Questa pagina ci permetterà di compiere 2 azioni: *Prelevare* e *Depositare*. NB- E' ovvio che sia impossibile depositare e prelevare denaro contante attraverso un'applicazione software ma la nostra è più una simulazione del processo che, con un po' di immaginazione, può avvenire all'interno degli sportelli ATM.
 
 Entrambe le azioni necessitano che nel *TextField* soprastante sia inserito un valore numerico accettato, cioè conforme alla notazione decimale americana (120.96 e non 120,96). Nel momento in cui viene premuto il tasto corrispondente all'azione desiderata verrà contattato il ***Server*** per completare la transazione e aggiornare il valore del conto sul ***DB***.
 
